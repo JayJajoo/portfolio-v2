@@ -1385,7 +1385,7 @@ function initAudio() {
   audioCtx = new AC();
   masterGain = audioCtx.createGain();
   masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
-  masterGain.gain.linearRampToValueAtTime(0.12, audioCtx.currentTime + 3);
+  masterGain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 3);
   masterGain.connect(audioCtx.destination);
 
   /* ── Reverb impulse ── */
@@ -1439,7 +1439,7 @@ function playSwoosh() {
   osc.type = 'sawtooth';
   osc.frequency.setValueAtTime(1400, now);
   osc.frequency.exponentialRampToValueAtTime(180, now + 0.18);
-  gain.gain.setValueAtTime(0.07, now);
+  gain.gain.setValueAtTime(0.3, now);
   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
 
   osc.connect(filter); filter.connect(gain); gain.connect(masterGain);
@@ -1459,7 +1459,7 @@ document.addEventListener('mousemove', e => {
   const freq = 800 + (e.clientX / window.innerWidth) * 600;
   osc.type = 'sine';
   osc.frequency.value = freq;
-  gain.gain.setValueAtTime(0.012, t);
+  gain.gain.setValueAtTime(0.06, t);
   gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
   osc.connect(gain); gain.connect(masterGain);
   osc.start(); osc.stop(t + 0.08);
@@ -1479,7 +1479,7 @@ muteBtn.title = 'Toggle sound';
 muteBtn.textContent = '🔊';
 muteBtn.addEventListener('click', () => {
   isMuted = !isMuted;
-  if (masterGain) masterGain.gain.value = isMuted ? 0 : 0.12;
+  if (masterGain) masterGain.gain.value = isMuted ? 0 : 0.5;
   muteBtn.textContent = isMuted ? '🔇' : '🔊';
 });
 document.body.appendChild(muteBtn);
