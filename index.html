@@ -1096,14 +1096,67 @@
 <button id="back-to-top" aria-label="Back to top">↑</button>
 
 <!-- MOBILE BOTTOM NAV -->
-<nav id="mobile-nav">
-  <a href="#about"        class="mob-tab" data-section="about">        <span class="mob-icon">🧠</span><span class="mob-label">About</span></a>
-  <a href="#skills"       class="mob-tab" data-section="skills">       <span class="mob-icon">⚡</span><span class="mob-label">Skills</span></a>
-  <a href="#experience"   class="mob-tab" data-section="experience">   <span class="mob-icon">💼</span><span class="mob-label">Work</span></a>
-  <a href="#projects"     class="mob-tab" data-section="projects">     <span class="mob-icon">🚀</span><span class="mob-label">Projects</span></a>
-  <a href="#publications" class="mob-tab" data-section="publications"> <span class="mob-icon">📄</span><span class="mob-label">Papers</span></a>
-  <a href="#contact"      class="mob-tab" data-section="contact">      <span class="mob-icon">📬</span><span class="mob-label">Contact</span></a>
-</nav>
+<div id="bnav">
+  <a href="#about"        class="bt" data-s="about">        <span>🧠</span><small>About</small></a>
+  <a href="#skills"       class="bt" data-s="skills">       <span>⚡</span><small>Skills</small></a>
+  <a href="#experience"   class="bt" data-s="experience">   <span>💼</span><small>Work</small></a>
+  <a href="#projects"     class="bt" data-s="projects">     <span>🚀</span><small>Projects</small></a>
+  <a href="#publications" class="bt" data-s="publications"> <span>📄</span><small>Papers</small></a>
+  <a href="#contact"      class="bt" data-s="contact">      <span>📬</span><small>Contact</small></a>
+</div>
+<style>
+#bnav {
+  display: none;
+}
+@media (max-width: 900px) {
+  #bnav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 14px;
+    left: 14px;
+    right: 14px;
+    height: 60px;
+    z-index: 9000;
+    background: rgba(6,6,22,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 999px;
+    padding: 0 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+  }
+  .bt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 100%;
+    gap: 3px;
+    text-decoration: none;
+    border-radius: 999px;
+    transition: background 0.2s;
+  }
+  .bt span { font-size: 1.1rem; line-height: 1; }
+  .bt small {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #8888aa;
+    transition: color 0.2s;
+  }
+  .bt.active { background: rgba(0,212,255,0.15); }
+  .bt.active small { color: #00d4ff; }
+  .hamburger, .nav-links { display: none !important; }
+  body { padding-bottom: 80px; }
+}
+</style>
 
 <style>
   /* ─── EDUCATION ─────────────────────────────────────────────── */
@@ -1201,63 +1254,6 @@
     transform: scale(1.1);
   }
 
-  /* ─── MOBILE BOTTOM NAV ─────────────────────────────────────── */
-  #mobile-nav {
-    display: none;
-  }
-  @media (max-width: 900px) {
-    #mobile-nav {
-      display: flex !important;
-      flex-direction: row !important;
-      flex-wrap: nowrap !important;
-      align-items: center !important;
-      justify-content: space-around !important;
-      position: fixed !important;
-      bottom: 1rem !important;
-      left: 1rem !important;
-      right: 1rem !important;
-      height: 62px !important;
-      z-index: 500 !important;
-      background: rgba(8, 8, 28, 0.82) !important;
-      backdrop-filter: blur(24px) !important;
-      -webkit-backdrop-filter: blur(24px) !important;
-      border: 1px solid rgba(255,255,255,0.12) !important;
-      border-radius: 999px !important;
-      padding: 0 0.6rem !important;
-      overflow: hidden !important;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.6) !important;
-    }
-    .mob-tab {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 0.12rem;
-      padding: 0.35rem 0.5rem;
-      border-radius: 999px;
-      text-decoration: none;
-      flex: 1;
-      height: 100%;
-      transition: background 0.25s ease;
-    }
-    .mob-icon { font-size: 1.1rem; line-height: 1; display: block; }
-    .mob-label {
-      font-size: 0.52rem;
-      font-weight: 600;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      transition: color 0.25s ease;
-      white-space: nowrap;
-      display: block;
-    }
-    .mob-tab.active { background: rgba(0, 212, 255, 0.15); }
-    .mob-tab.active .mob-icon { filter: drop-shadow(0 0 5px var(--accent-cyan)); }
-    .mob-tab.active .mob-label { color: var(--accent-cyan); }
-    .hamburger { display: none !important; }
-    .nav-links { display: none !important; }
-    body { padding-bottom: 5.5rem; }
-  }
 </style>
 
 <script>
@@ -1570,15 +1566,13 @@ if (photoWrap) {
 /* ═══════════════════════════════════════════════════════════════
    MOBILE BOTTOM NAV — active tab tracking
 ═══════════════════════════════════════════════════════════════ */
-const mobTabs = document.querySelectorAll('.mob-tab');
+const bTabs = document.querySelectorAll('.bt');
 
 const sectionObs = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const id = entry.target.id;
-      mobTabs.forEach(t => {
-        t.classList.toggle('active', t.dataset.section === id);
-      });
+      bTabs.forEach(t => t.classList.toggle('active', t.dataset.s === id));
     }
   });
 }, { threshold: 0.35 });
@@ -1588,10 +1582,10 @@ const sectionObs = new IntersectionObserver((entries) => {
   if (el) sectionObs.observe(el);
 });
 
-mobTabs.forEach(tab => {
+bTabs.forEach(tab => {
   tab.addEventListener('click', e => {
     e.preventDefault();
-    const target = document.getElementById(tab.dataset.section);
+    const target = document.getElementById(tab.dataset.s);
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
