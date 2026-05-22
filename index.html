@@ -511,22 +511,28 @@
 
   </div>
 
-  <div class="stats-grid">
-    <div class="glass stat-card reveal">
-      <div class="metric-val">9.05<span class="metric-unit">/10</span></div>
-      <div class="metric-label">Undergrad GPA</div>
+  <div class="about-right">
+    <div class="stats-grid">
+      <div class="glass stat-card reveal">
+        <div class="metric-val">9.05<span class="metric-unit">/10</span></div>
+        <div class="metric-label">Undergrad GPA</div>
+      </div>
+      <div class="glass stat-card reveal" style="transition-delay:0.1s">
+        <div class="metric-val">3.96<span class="metric-unit">/4.0</span></div>
+        <div class="metric-label">Master's GPA</div>
+      </div>
+      <div class="glass stat-card reveal" style="transition-delay:0.2s">
+        <div class="metric-val">23</div>
+        <div class="metric-label">Years Old</div>
+      </div>
+      <div class="glass stat-card reveal" style="transition-delay:0.3s">
+        <div class="metric-val">2</div>
+        <div class="metric-label">Papers Published</div>
+      </div>
     </div>
-    <div class="glass stat-card reveal" style="transition-delay:0.1s">
-      <div class="metric-val">3.96<span class="metric-unit">/4.0</span></div>
-      <div class="metric-label">Master's GPA</div>
-    </div>
-    <div class="glass stat-card reveal" style="transition-delay:0.2s">
-      <div class="metric-val">23</div>
-      <div class="metric-label">Years Old</div>
-    </div>
-    <div class="glass stat-card reveal" style="transition-delay:0.3s">
-      <div class="metric-val">2</div>
-      <div class="metric-label">Papers Published</div>
+    <div class="about-photo-wrap reveal" style="transition-delay:0.2s">
+      <img src="jay.jpeg" alt="Jay Jajoo" class="about-photo" />
+      <div class="about-photo-glow"></div>
     </div>
   </div>
   </div>
@@ -616,8 +622,30 @@
   /* ─── ABOUT ─────────────────────────────────────────────────── */
   .about-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; align-items: start; }
   .about-card { padding: 2.5rem; }
+  .about-right { display: flex; flex-direction: column; gap: 1rem; }
   .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   .stat-card { padding: 1.8rem 1.2rem; text-align: center; cursor: default; }
+
+  .about-photo-wrap {
+    position: relative; border-radius: var(--radius); overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    transition: all var(--transition);
+  }
+  .about-photo-wrap:hover {
+    border-color: var(--border-h);
+    box-shadow: 0 0 30px var(--glow-cyan), 0 8px 32px rgba(0,0,0,0.5);
+    transform: translateY(-4px);
+  }
+  .about-photo {
+    width: 100%; aspect-ratio: 4/3; object-fit: cover; object-position: top;
+    display: block;
+  }
+  .about-photo-glow {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(5,5,16,0.5) 0%, transparent 50%);
+    pointer-events: none;
+  }
   .metric-val {
     font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900;
     background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
@@ -1366,6 +1394,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   /* ─── TABLET ────────────────────────────────────────────────── */
   @media (max-width: 1024px) {
     .about-grid { grid-template-columns: 1fr; }
+    .about-photo { aspect-ratio: 16/9; }
     .stats-grid { grid-template-columns: repeat(4,1fr); }
     .skills-container { grid-template-columns: 1fr 1fr; }
     .projects-grid { grid-template-columns: 1fr 1fr; }
