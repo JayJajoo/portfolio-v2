@@ -1460,6 +1460,7 @@ function initAudio() {
   if (audioCtx) return;
   const AC = window.AudioContext || window.webkitAudioContext;
   audioCtx  = new AC();
+  audioCtx.resume(); // required for iOS Safari
   masterGain = audioCtx.createGain();
   masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
   masterGain.gain.linearRampToValueAtTime(0.45, audioCtx.currentTime + 4);
@@ -1512,16 +1513,25 @@ function playChime() {
   });
 }
 
-/* ── Attach chime to interactive elements (once DOM is ready) ── */
+/* ── Attach chime to interactive elements (mouse + touch) ── */
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.btn-primary, .btn-ghost, .nav-links a, .social-icon, .contact-btn, .project-link, .mob-tab').forEach(el => {
+  document.querySelectorAll('.btn-primary, .btn-ghost, .nav-links a, .social-icon, .contact-btn, .project-link, .bt').forEach(el => {
     el.addEventListener('mouseenter', playChime);
+    el.addEventListener('touchstart', playChime, { passive: true });
   });
 });
 
-/* ── Start audio on first mouse move ── */
-document.addEventListener('mousemove', () => { if (!audioCtx) initAudio(); }, { once: true });
-document.addEventListener('click',     () => { if (!audioCtx) initAudio(); }, { once: true });
+/* ── Start audio on first interaction (mouse OR touch) ── */
+function tryStartAudio() {
+  if (!audioCtx) {
+    initAudio();
+  } else if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+['mousemove','click','touchstart','touchend'].forEach(evt => {
+  document.addEventListener(evt, tryStartAudio, { once: false, passive: true });
+});
 
 /* ── Mute toggle ── */
 const muteBtn = document.createElement('button');
