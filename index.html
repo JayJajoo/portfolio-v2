@@ -1441,102 +1441,89 @@ const skillGroupObs = new IntersectionObserver((entries) => {
 document.querySelectorAll('.skill-group').forEach(g => skillGroupObs.observe(g));
 
 /* ═══════════════════════════════════════════════════════════════
-   AUDIO SYSTEM (Web Audio API — no external files)
+   AUDIO SYSTEM — soft musical tones, no harsh sounds
 ═══════════════════════════════════════════════════════════════ */
-let audioCtx = null, masterGain = null, isMuted = false, audioReady = false;
+let audioCtx = null, masterGain = null, convolver = null;
+let isMuted = false, audioReady = false;
+
+function buildReverb(ctx, seconds) {
+  const len = ctx.sampleRate * seconds;
+  const buf = ctx.createBuffer(2, len, ctx.sampleRate);
+  for (let c = 0; c < 2; c++) {
+    const d = buf.getChannelData(c);
+    for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/len, 3);
+  }
+  const node = ctx.createConvolver();
+  node.buffer = buf;
+  return node;
+}
 
 function initAudio() {
   if (audioCtx) return;
   const AC = window.AudioContext || window.webkitAudioContext;
-  audioCtx = new AC();
+  audioCtx  = new AC();
   masterGain = audioCtx.createGain();
   masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
-  masterGain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 3);
+  masterGain.gain.linearRampToValueAtTime(0.45, audioCtx.currentTime + 4);
   masterGain.connect(audioCtx.destination);
 
-  /* ── Reverb impulse ── */
-  const revLen = audioCtx.sampleRate * 4;
-  const revBuf = audioCtx.createBuffer(2, revLen, audioCtx.sampleRate);
-  for (let c = 0; c < 2; c++) {
-    const d = revBuf.getChannelData(c);
-    for (let i = 0; i < revLen; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/revLen, 2.5);
-  }
-  const convolver = audioCtx.createConvolver();
-  convolver.buffer = revBuf;
+  convolver = buildReverb(audioCtx, 3.5);
   convolver.connect(masterGain);
 
-  /* ── Low-pass filter on everything ── */
-  const lpf = audioCtx.createBiquadFilter();
-  lpf.type = 'lowpass'; lpf.frequency.value = 600;
-  lpf.connect(convolver);
-
-  /* ── Ambient drone oscillators ── */
-  [55, 82.5, 110, 165].forEach((freq, i) => {
+  /* ── Calm ambient pad: D minor chord (soft sines only) ── */
+  const notes = [73.42, 110, 146.83, 220, 293.66]; // D2 A2 D3 A3 D4
+  notes.forEach((freq, i) => {
     const osc  = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     const lfo  = audioCtx.createOscillator();
     const lfoG = audioCtx.createGain();
 
-    osc.type = i % 2 === 0 ? 'sine' : 'triangle';
+    osc.type = 'sine';
     osc.frequency.value = freq;
 
-    lfo.frequency.value = 0.07 + i * 0.04;
-    lfoG.gain.value = freq * 0.018;
+    lfo.type = 'sine';
+    lfo.frequency.value = 0.05 + i * 0.03;
+    lfoG.gain.value = freq * 0.008;
     lfo.connect(lfoG); lfoG.connect(osc.frequency);
 
-    gain.gain.value = 0.09 / (i + 1);
-    osc.connect(gain); gain.connect(lpf);
-
+    gain.gain.value = 0.07 / (i + 1);
+    osc.connect(gain); gain.connect(convolver);
     osc.start(); lfo.start();
   });
 
   audioReady = true;
 }
 
-/* ── Hover swoosh ── */
-function playSwoosh() {
+/* ── Soft crystal bell chime on hover ── */
+function playChime() {
   if (!audioReady || isMuted) return;
-  const osc    = audioCtx.createOscillator();
-  const gain   = audioCtx.createGain();
-  const filter = audioCtx.createBiquadFilter();
-  const now    = audioCtx.currentTime;
+  const now = audioCtx.currentTime;
 
-  filter.type = 'bandpass'; filter.frequency.value = 900; filter.Q.value = 0.4;
-  osc.type = 'sawtooth';
-  osc.frequency.setValueAtTime(1400, now);
-  osc.frequency.exponentialRampToValueAtTime(180, now + 0.18);
-  gain.gain.setValueAtTime(0.3, now);
-  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
-
-  osc.connect(filter); filter.connect(gain); gain.connect(masterGain);
-  osc.start(); osc.stop(now + 0.18);
+  // Two harmonic sines = bell-like tone
+  [880, 1760].forEach((freq, i) => {
+    const osc  = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    // soft attack, long smooth decay
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(i === 0 ? 0.22 : 0.09, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+    osc.connect(gain); gain.connect(convolver);
+    osc.start(now); osc.stop(now + 1.2);
+  });
 }
 
-/* ── Cursor move shimmer (throttled, very subtle) ── */
-let lastShimmer = 0;
-document.addEventListener('mousemove', e => {
-  if (!audioCtx) { initAudio(); return; }
-  const now = Date.now();
-  if (isMuted || now - lastShimmer < 120) return;
-  lastShimmer = now;
-  const osc  = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  const t    = audioCtx.currentTime;
-  const freq = 800 + (e.clientX / window.innerWidth) * 600;
-  osc.type = 'sine';
-  osc.frequency.value = freq;
-  gain.gain.setValueAtTime(0.06, t);
-  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
-  osc.connect(gain); gain.connect(masterGain);
-  osc.start(); osc.stop(t + 0.08);
-});
-
-/* ── Apply hover sounds to interactive elements ── */
+/* ── Attach chime to interactive elements (once DOM is ready) ── */
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.glass, .btn-primary, .btn-ghost, .nav-links a, .social-icon, .contact-btn').forEach(el => {
-    el.addEventListener('mouseenter', playSwoosh);
+  document.querySelectorAll('.btn-primary, .btn-ghost, .nav-links a, .social-icon, .contact-btn, .project-link, .mob-tab').forEach(el => {
+    el.addEventListener('mouseenter', playChime);
   });
 });
+
+/* ── Start audio on first mouse move ── */
+document.addEventListener('mousemove', () => { if (!audioCtx) initAudio(); }, { once: true });
+document.addEventListener('click',     () => { if (!audioCtx) initAudio(); }, { once: true });
 
 /* ── Mute toggle ── */
 const muteBtn = document.createElement('button');
@@ -1545,7 +1532,7 @@ muteBtn.title = 'Toggle sound';
 muteBtn.textContent = '🔊';
 muteBtn.addEventListener('click', () => {
   isMuted = !isMuted;
-  if (masterGain) masterGain.gain.value = isMuted ? 0 : 0.5;
+  if (masterGain) masterGain.gain.value = isMuted ? 0 : 0.45;
   muteBtn.textContent = isMuted ? '🔇' : '🔊';
 });
 document.body.appendChild(muteBtn);
