@@ -507,6 +507,28 @@
       <span class="about-tag">🔬 Published Researcher</span>
       <span class="about-tag">📍 Boston, MA</span>
     </div>
+
+    <div class="about-metrics">
+      <div class="about-metric">
+        <span class="metric-val">9.05<span class="metric-unit">/10</span></span>
+        <span class="metric-label">Undergrad GPA</span>
+      </div>
+      <div class="about-metric-divider"></div>
+      <div class="about-metric">
+        <span class="metric-val">3.96<span class="metric-unit">/4.0</span></span>
+        <span class="metric-label">Master's GPA</span>
+      </div>
+      <div class="about-metric-divider"></div>
+      <div class="about-metric">
+        <span class="metric-val">23</span>
+        <span class="metric-label">Years Old</span>
+      </div>
+      <div class="about-metric-divider"></div>
+      <div class="about-metric">
+        <span class="metric-val">2</span>
+        <span class="metric-label">Papers Published</span>
+      </div>
+    </div>
   </div>
 </section>
 </div>
@@ -606,6 +628,34 @@
     transition: all var(--transition);
   }
   .about-tag:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+
+  .about-metrics {
+    display: flex; align-items: center; gap: 0;
+    margin-top: 2rem; padding-top: 1.8rem;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap; gap: 0;
+  }
+  .about-metric {
+    flex: 1; text-align: center; padding: 0.5rem 1rem;
+    display: flex; flex-direction: column; gap: 0.3rem;
+    min-width: 100px;
+  }
+  .about-metric-divider {
+    width: 1px; height: 40px; background: var(--border); flex-shrink: 0;
+  }
+  .metric-val {
+    font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; line-height: 1;
+  }
+  .metric-unit {
+    font-size: 1rem; font-weight: 400; opacity: 0.7;
+  }
+  .metric-label {
+    font-size: 0.72rem; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1.5px;
+  }
 
   /* ─── SKILLS ────────────────────────────────────────────────── */
   .skills-container { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
