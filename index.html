@@ -1534,55 +1534,87 @@ document.addEventListener('mousemove', () => {
   if (!audioCtx) initAudio();
 }, { once: true });
 
-/* ── Mobile sound unlock button ── */
-const soundBtn = document.createElement('div');
-soundBtn.id = 'sound-unlock';
-soundBtn.innerHTML = '🔊 Tap for Sound';
-soundBtn.style.cssText = `
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  background: rgba(0,212,255,0.15);
-  border: 1px solid rgba(0,212,255,0.5);
-  color: #00d4ff;
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 1rem 2rem;
-  border-radius: 999px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 0 30px rgba(0,212,255,0.3);
-  cursor: pointer;
-  text-align: center;
-`;
-
-/* show only on touch devices */
-if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-  soundBtn.style.display = 'block';
+/* ── Mobile audio modal ── */
+function dismissAudioModal() {
+  const modal = document.getElementById('audio-modal');
+  if (modal) {
+    modal.style.opacity = '0';
+    modal.style.pointerEvents = 'none';
+    setTimeout(() => modal.remove(), 400);
+  }
 }
 
-soundBtn.addEventListener('touchend', function(e) {
-  e.preventDefault();
-  if (!audioCtx) initAudio();
-  audioCtx.resume().then(() => {
-    iosUnlock();
-    soundBtn.style.display = 'none';
-  });
-}, { passive: false });
+if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+  const modal = document.createElement('div');
+  modal.id = 'audio-modal';
+  modal.innerHTML = `
+    <div id="audio-modal-box">
+      <div id="audio-modal-icon">🎵</div>
+      <h3 id="audio-modal-title">Enable Sound?</h3>
+      <p id="audio-modal-sub">This site has a calm ambient soundtrack and soft interaction sounds.</p>
+      <div id="audio-modal-btns">
+        <button id="audio-yes">🔊 With Audio</button>
+        <button id="audio-no">🔇 No Thanks</button>
+      </div>
+    </div>
+  `;
+  modal.style.cssText = `
+    position: fixed; inset: 0; z-index: 9998;
+    background: rgba(5,5,16,0.75);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.4s ease; opacity: 1;
+  `;
 
-soundBtn.addEventListener('click', function() {
-  if (!audioCtx) initAudio();
-  audioCtx.resume().then(() => {
-    iosUnlock();
-    soundBtn.style.display = 'none';
-  });
-});
+  const box = modal.querySelector('#audio-modal-box');
+  box.style.cssText = `
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    max-width: 300px; width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0,212,255,0.1);
+    font-family: 'Inter', sans-serif;
+  `;
+  modal.querySelector('#audio-modal-icon').style.cssText = `font-size:2.5rem; margin-bottom:0.8rem; display:block;`;
+  modal.querySelector('#audio-modal-title').style.cssText = `
+    font-family:'Orbitron',sans-serif; font-size:1.1rem; font-weight:700;
+    color:#e8e8f0; margin-bottom:0.6rem;
+  `;
+  modal.querySelector('#audio-modal-sub').style.cssText = `
+    font-size:0.82rem; color:#8888aa; line-height:1.6; margin-bottom:1.8rem;
+  `;
+  modal.querySelector('#audio-modal-btns').style.cssText = `display:flex; gap:0.8rem; justify-content:center;`;
 
-document.body.appendChild(soundBtn);
+  const yesBtn = modal.querySelector('#audio-yes');
+  yesBtn.style.cssText = `
+    padding:0.7rem 1.4rem; border-radius:999px; border:1px solid rgba(0,212,255,0.5);
+    background:rgba(0,212,255,0.12); color:#00d4ff; font-weight:700;
+    font-size:0.85rem; cursor:pointer; font-family:'Inter',sans-serif;
+  `;
+  const noBtn = modal.querySelector('#audio-no');
+  noBtn.style.cssText = `
+    padding:0.7rem 1.4rem; border-radius:999px; border:1px solid rgba(255,255,255,0.1);
+    background:rgba(255,255,255,0.05); color:#8888aa; font-weight:600;
+    font-size:0.85rem; cursor:pointer; font-family:'Inter',sans-serif;
+  `;
+
+  function enableAudio() {
+    if (!audioCtx) initAudio();
+    audioCtx.resume().then(() => { iosUnlock(); });
+    isMuted = false;
+    dismissAudioModal();
+  }
+
+  yesBtn.addEventListener('touchend', e => { e.preventDefault(); enableAudio(); }, { passive: false });
+  yesBtn.addEventListener('click', enableAudio);
+  noBtn.addEventListener('touchend',  e => { e.preventDefault(); isMuted = true; dismissAudioModal(); }, { passive: false });
+  noBtn.addEventListener('click', () => { isMuted = true; dismissAudioModal(); });
+
+  document.body.appendChild(modal);
+}
 
 /* ── Mute toggle ── */
 const muteBtn = document.createElement('button');
