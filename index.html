@@ -631,12 +631,13 @@
     position: relative; border-radius: var(--radius); overflow: hidden;
     border: 1px solid var(--border);
     box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    transition: all var(--transition);
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.5s ease;
   }
   .about-photo-wrap:hover {
     border-color: var(--border-h);
-    box-shadow: 0 0 30px var(--glow-cyan), 0 8px 32px rgba(0,0,0,0.5);
-    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px var(--glow-cyan);
   }
   .about-photo {
     width: 100%; height: 100%; min-height: 120px;
@@ -1356,6 +1357,32 @@ const skillGroupObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.2 });
 
 document.querySelectorAll('.skill-group').forEach(g => skillGroupObs.observe(g));
+
+/* ═══════════════════════════════════════════════════════════════
+   3D PHOTO TILT
+═══════════════════════════════════════════════════════════════ */
+const photoWrap = document.querySelector('.about-photo-wrap');
+if (photoWrap) {
+  const MAX_TILT = 18;
+
+  photoWrap.addEventListener('mousemove', e => {
+    const rect = photoWrap.getBoundingClientRect();
+    const cx = rect.left + rect.width  / 2;
+    const cy = rect.top  + rect.height / 2;
+    // -1 to +1, weighted by distance from center
+    const dx = (e.clientX - cx) / (rect.width  / 2);
+    const dy = (e.clientY - cy) / (rect.height / 2);
+    const rotY =  dx * MAX_TILT;
+    const rotX = -dy * MAX_TILT;
+    photoWrap.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease, transform 0.08s ease';
+    photoWrap.style.transform  = `perspective(700px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.03)`;
+  });
+
+  photoWrap.addEventListener('mouseleave', () => {
+    photoWrap.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease, transform 0.5s ease';
+    photoWrap.style.transform  = 'perspective(700px) rotateX(0deg) rotateY(0deg) scale(1)';
+  });
+}
 
 /* ═══════════════════════════════════════════════════════════════
    SMOOTH NAV SCROLLING
