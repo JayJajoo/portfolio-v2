@@ -1173,6 +1173,23 @@
   }
   #back-to-top.visible { opacity: 1; pointer-events: all; }
   #back-to-top:hover { transform: translateY(-4px) scale(1.1); }
+
+  /* ─── MUTE BUTTON ───────────────────────────────────────────── */
+  #mute-btn {
+    position: fixed; bottom: 2rem; left: 2rem; z-index: 200;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--bg-surface);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border); color: var(--text-primary);
+    font-size: 1.15rem; cursor: none;
+    transition: all var(--transition);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  #mute-btn:hover {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 16px var(--glow-cyan);
+    transform: scale(1.1);
+  }
 </style>
 
 <script>
@@ -1356,6 +1373,116 @@ const skillGroupObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.2 });
 
 document.querySelectorAll('.skill-group').forEach(g => skillGroupObs.observe(g));
+
+/* ═══════════════════════════════════════════════════════════════
+   AUDIO SYSTEM (Web Audio API — no external files)
+═══════════════════════════════════════════════════════════════ */
+let audioCtx = null, masterGain = null, isMuted = false, audioReady = false;
+
+function initAudio() {
+  if (audioCtx) return;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  audioCtx = new AC();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+  masterGain.gain.linearRampToValueAtTime(0.12, audioCtx.currentTime + 3);
+  masterGain.connect(audioCtx.destination);
+
+  /* ── Reverb impulse ── */
+  const revLen = audioCtx.sampleRate * 4;
+  const revBuf = audioCtx.createBuffer(2, revLen, audioCtx.sampleRate);
+  for (let c = 0; c < 2; c++) {
+    const d = revBuf.getChannelData(c);
+    for (let i = 0; i < revLen; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/revLen, 2.5);
+  }
+  const convolver = audioCtx.createConvolver();
+  convolver.buffer = revBuf;
+  convolver.connect(masterGain);
+
+  /* ── Low-pass filter on everything ── */
+  const lpf = audioCtx.createBiquadFilter();
+  lpf.type = 'lowpass'; lpf.frequency.value = 600;
+  lpf.connect(convolver);
+
+  /* ── Ambient drone oscillators ── */
+  [55, 82.5, 110, 165].forEach((freq, i) => {
+    const osc  = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const lfo  = audioCtx.createOscillator();
+    const lfoG = audioCtx.createGain();
+
+    osc.type = i % 2 === 0 ? 'sine' : 'triangle';
+    osc.frequency.value = freq;
+
+    lfo.frequency.value = 0.07 + i * 0.04;
+    lfoG.gain.value = freq * 0.018;
+    lfo.connect(lfoG); lfoG.connect(osc.frequency);
+
+    gain.gain.value = 0.09 / (i + 1);
+    osc.connect(gain); gain.connect(lpf);
+
+    osc.start(); lfo.start();
+  });
+
+  audioReady = true;
+}
+
+/* ── Hover swoosh ── */
+function playSwoosh() {
+  if (!audioReady || isMuted) return;
+  const osc    = audioCtx.createOscillator();
+  const gain   = audioCtx.createGain();
+  const filter = audioCtx.createBiquadFilter();
+  const now    = audioCtx.currentTime;
+
+  filter.type = 'bandpass'; filter.frequency.value = 900; filter.Q.value = 0.4;
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(1400, now);
+  osc.frequency.exponentialRampToValueAtTime(180, now + 0.18);
+  gain.gain.setValueAtTime(0.07, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+  osc.connect(filter); filter.connect(gain); gain.connect(masterGain);
+  osc.start(); osc.stop(now + 0.18);
+}
+
+/* ── Cursor move shimmer (throttled, very subtle) ── */
+let lastShimmer = 0;
+document.addEventListener('mousemove', e => {
+  if (!audioCtx) { initAudio(); return; }
+  const now = Date.now();
+  if (isMuted || now - lastShimmer < 120) return;
+  lastShimmer = now;
+  const osc  = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  const t    = audioCtx.currentTime;
+  const freq = 800 + (e.clientX / window.innerWidth) * 600;
+  osc.type = 'sine';
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0.012, t);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
+  osc.connect(gain); gain.connect(masterGain);
+  osc.start(); osc.stop(t + 0.08);
+});
+
+/* ── Apply hover sounds to interactive elements ── */
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.glass, .btn-primary, .btn-ghost, .nav-links a, .social-icon, .contact-btn').forEach(el => {
+    el.addEventListener('mouseenter', playSwoosh);
+  });
+});
+
+/* ── Mute toggle ── */
+const muteBtn = document.createElement('button');
+muteBtn.id = 'mute-btn';
+muteBtn.title = 'Toggle sound';
+muteBtn.textContent = '🔊';
+muteBtn.addEventListener('click', () => {
+  isMuted = !isMuted;
+  if (masterGain) masterGain.gain.value = isMuted ? 0 : 0.12;
+  muteBtn.textContent = isMuted ? '🔇' : '🔊';
+});
+document.body.appendChild(muteBtn);
 
 /* ═══════════════════════════════════════════════════════════════
    3D PHOTO TILT
