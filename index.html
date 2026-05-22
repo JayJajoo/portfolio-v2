@@ -1643,15 +1643,58 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     body { cursor: auto; }
     #cursor-dot, #cursor-ring { display: none; }
 
-    .hero-name { font-size: 2.2rem; }
-    .hero-tagline { font-size: 0.9rem; }
-    .hero-cta { flex-direction: column; align-items: center; }
+    /* ── Hero fixes ── */
+    .hero-name {
+      font-size: 2rem;
+      /* fallback for browsers where gradient text fails */
+      color: #00d4ff;
+      -webkit-text-fill-color: unset;
+    }
+    /* re-apply gradient only where supported */
+    @supports (-webkit-background-clip: text) {
+      .hero-name {
+        background: linear-gradient(135deg, #ffffff 0%, #00d4ff 50%, #7b2fff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+      }
+    }
 
+    /* ── Avatar: replace conic-gradient with simple border ── */
+    .avatar-wrapper { width: 120px; height: 120px; }
+    .avatar-ring {
+      background: none !important;
+      border: 3px solid transparent;
+      border-radius: 50% !important;
+      inset: -3px !important;
+      animation: none !important;
+      padding: 0 !important;
+      /* simple glowing border instead */
+      box-shadow: 0 0 0 3px #00d4ff, 0 0 0 6px rgba(123,47,255,0.5);
+    }
+    .avatar-ring-inner { display: none; }
+    .avatar-core {
+      inset: 3px !important;
+      font-size: 2.2rem;
+      border-radius: 50% !important;
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+
+    .hero-tagline { font-size: 0.88rem; padding: 0 1rem; }
+    .hero-cta { flex-direction: column; align-items: center; }
+    .hero-eyebrow { font-size: 0.75rem; }
+
+    /* ── Section nav logo ── */
+    .nav-logo { color: #00d4ff; -webkit-text-fill-color: #00d4ff; }
+
+    /* ── Layouts ── */
     .stats-grid { grid-template-columns: 1fr 1fr; }
     .skills-container { grid-template-columns: 1fr; }
     .projects-grid { grid-template-columns: 1fr; }
     .achieve-grid { grid-template-columns: 1fr; }
     .contact-links { flex-direction: column; align-items: center; }
+    .about-grid { grid-template-columns: 1fr; }
 
     .timeline { padding-left: 1.5rem; }
     .timeline-dot { left: -1.8rem; }
@@ -1661,7 +1704,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     .section-title { font-size: 1.7rem; }
 
     nav { padding: 1rem; }
-    .stat-number { font-size: 1.8rem; }
   }
 
   /* ─── SELECTION COLOR ───────────────────────────────────────── */
