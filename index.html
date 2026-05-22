@@ -1364,3 +1364,122 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 </script>
+
+<!-- ════════════════════════════════════════════════════════════════
+     RESPONSIVE CSS
+═══════════════════════════════════════════════════════════════════ -->
+<style>
+  /* ─── MOBILE NAV ────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links {
+      display: none; position: fixed; inset: 0; top: 60px;
+      background: rgba(5,5,16,0.97); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 2.5rem; z-index: 99;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { font-size: 1.2rem; }
+    .nav-resume-btn { display: none; }
+    .hamburger { display: flex; }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+  }
+
+  /* ─── TABLET ────────────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(4,1fr); }
+    .skills-container { grid-template-columns: 1fr 1fr; }
+    .projects-grid { grid-template-columns: 1fr 1fr; }
+    .edu-grid { grid-template-columns: 1fr; }
+    .pub-grid { grid-template-columns: 1fr; }
+    .achieve-grid { grid-template-columns: 1fr 1fr; }
+    .section-title { font-size: 2rem; }
+  }
+
+  /* ─── MOBILE ────────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    body { cursor: auto; }
+    #cursor-dot, #cursor-ring { display: none; }
+
+    .hero-name { font-size: 2.2rem; }
+    .hero-tagline { font-size: 0.9rem; }
+    .hero-cta { flex-direction: column; align-items: center; }
+
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .skills-container { grid-template-columns: 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .achieve-grid { grid-template-columns: 1fr; }
+    .contact-links { flex-direction: column; align-items: center; }
+
+    .timeline { padding-left: 1.5rem; }
+    .timeline-dot { left: -1.8rem; }
+    .timeline-header { flex-direction: column; gap: 0.6rem; }
+
+    .edu-card { flex-direction: column; gap: 0.8rem; }
+    .section-title { font-size: 1.7rem; }
+
+    nav { padding: 1rem; }
+    .stat-number { font-size: 1.8rem; }
+  }
+
+  /* ─── SELECTION COLOR ───────────────────────────────────────── */
+  ::selection { background: rgba(0,212,255,0.25); color: var(--text-primary); }
+
+  /* ─── SCROLLBAR ─────────────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-deep); }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--accent-cyan), var(--accent-purple));
+    border-radius: 3px;
+  }
+
+  /* ─── FOCUSED LINK OUTLINE ──────────────────────────────────── */
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent-cyan); outline-offset: 3px; border-radius: 4px;
+  }
+
+  /* ─── PROJECT CARD NEON BORDER ANIMATION ────────────────────── */
+  .project-card {
+    position: relative; z-index: 0;
+  }
+  .project-card::after {
+    content: '';
+    position: absolute; inset: -1px; border-radius: var(--radius);
+    background: conic-gradient(
+      from var(--angle, 0deg),
+      transparent 60%,
+      var(--accent-cyan),
+      var(--accent-purple),
+      transparent 80%
+    );
+    z-index: -1; opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .project-card:hover::after {
+    opacity: 1;
+    animation: rotate-border 2.5s linear infinite;
+  }
+
+  /* ─── ACHIEVEMENT CARD GLOW ─────────────────────────────────── */
+  .achieve-card:nth-child(1):hover { box-shadow: 0 0 40px rgba(0,255,136,0.15); border-color: rgba(0,255,136,0.3); }
+  .achieve-card:nth-child(2):hover { box-shadow: 0 0 40px rgba(0,200,100,0.15); border-color: rgba(0,200,100,0.3); }
+  .achieve-card:nth-child(3):hover { box-shadow: 0 0 40px rgba(0,100,255,0.15); border-color: rgba(0,100,255,0.3); }
+
+  /* ─── HERO SECTION FULL WIDTH ───────────────────────────────── */
+  #hero, footer {
+    max-width: 100% !important; margin: 0 !important; padding-left: 0 !important; padding-right: 0 !important;
+  }
+
+  /* ─── @property for conic angle ────────────────────────────── */
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+</style>
+
+</body>
+</html>
