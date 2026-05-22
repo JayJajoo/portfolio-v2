@@ -656,3 +656,249 @@
   .pill-green  { background: rgba(0,255,136,0.1);  color: var(--accent-green);  border-color: rgba(0,255,136,0.2); }
   .pill:hover  { transform: translateY(-2px) scale(1.05); filter: brightness(1.3); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
 </style>
+
+<!-- ════════════════════════════════════════════════════════════════
+     EXPERIENCE SECTION
+═══════════════════════════════════════════════════════════════════ -->
+<div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+<section id="experience" style="max-width:100%;padding:6rem 0;">
+  <p class="section-label reveal">💼 Experience</p>
+  <h2 class="section-title reveal">Where I've <span>Worked</span></h2>
+  <div class="section-divider reveal"></div>
+
+  <div class="timeline">
+
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="glass timeline-card">
+        <div class="timeline-header">
+          <div>
+            <h3 class="timeline-role">Data Science Co-op</h3>
+            <p class="timeline-company">🏢 Institute for Experiential AI — Portland, ME</p>
+          </div>
+          <span class="timeline-date">Jan 2026 – Aug 2026</span>
+        </div>
+        <ul class="timeline-bullets">
+          <li>Engineered a <strong>synthetic control + DiD framework</strong> (Two-Way Fixed Effects, clustered SE) for causal price elasticity — aligned to PEC benchmarks within <span class="hl-cyan">80% accuracy</span>.</li>
+          <li>Architected an insurance policy-issue prediction system across 5+ data sources, engineering <span class="hl-cyan">1,700+ features</span> + transformer embeddings, boosting gradient-boosting Gini by <span class="hl-cyan">43%</span>.</li>
+          <li>Built a <strong>LangGraph autonomous agent</strong> with LangSmith tracing, multi-LLM orchestration (Anthropic, Bedrock, Gemini), S3 crash-recovery, extracting data from <span class="hl-cyan">9.5M+ XML records</span> — <span class="hl-cyan">50% faster</span>.</li>
+          <li>Accelerated SQL development <span class="hl-cyan">5×</span> using Claude Code to auto-generate complex multi-CTE feature queries.</li>
+        </ul>
+        <div class="timeline-tags">
+          <span class="tag">LangGraph</span><span class="tag">LangSmith</span>
+          <span class="tag">AWS Bedrock</span><span class="tag">Causal Inference</span>
+          <span class="tag">XGBoost</span><span class="tag">Python</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal" style="transition-delay:0.15s">
+      <div class="timeline-dot"></div>
+      <div class="glass timeline-card">
+        <div class="timeline-header">
+          <div>
+            <h3 class="timeline-role">Data Science Intern</h3>
+            <p class="timeline-company">🏢 Imagine Web Technologies — Maharashtra, India</p>
+          </div>
+          <span class="timeline-date">May 2023 – Jul 2024</span>
+        </div>
+        <ul class="timeline-bullets">
+          <li>Built an automated <strong>ETL pipeline</strong> consolidating multi-source customer data, reducing manual integration time by <span class="hl-purple">35%</span> and accelerating downstream model development.</li>
+          <li>Fine-tuned a <strong>BERT model</strong> on long-form customer queries, improving classification accuracy by <span class="hl-purple">17%</span>; benchmarked against logistic regression and neural network baselines.</li>
+        </ul>
+        <div class="timeline-tags">
+          <span class="tag">BERT</span><span class="tag">ETL</span>
+          <span class="tag">NLP</span><span class="tag">Python</span><span class="tag">SQL</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PROJECTS SECTION
+═══════════════════════════════════════════════════════════════════ -->
+<div style="background:rgba(255,255,255,0.01);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+<div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+<section id="projects" style="max-width:100%;padding:6rem 0;">
+  <p class="section-label reveal">🚀 Projects</p>
+  <h2 class="section-title reveal">What I've <span>Built</span></h2>
+  <div class="section-divider reveal"></div>
+
+  <div class="projects-grid">
+
+    <div class="glass project-card reveal">
+      <div class="project-header">
+        <span class="project-icon">🗄️</span>
+        <div class="project-links">
+          <a href="https://github.com/JayJajoo" target="_blank" class="project-link">↗ GitHub</a>
+        </div>
+      </div>
+      <h3 class="project-name">QueryHub</h3>
+      <p class="project-sub">RAG-Based Text-to-SQL Platform</p>
+      <p class="project-desc">Airflow-orchestrated ETL for synthetic SQL generation across 11 domains. LangGraph schema embeddings, LoRA fine-tuned T5-large achieving <strong>85% accuracy</strong>. Containerized with Docker, monitored via Prometheus/Grafana (40+ metrics), hosted on GCP Cloud Run.</p>
+      <div class="project-tech">
+        <span class="tag">LangGraph</span><span class="tag">Airflow</span>
+        <span class="tag">LoRA</span><span class="tag">MLflow</span>
+        <span class="tag">Docker</span><span class="tag">GCP</span>
+      </div>
+    </div>
+
+    <div class="glass project-card reveal" style="transition-delay:0.1s">
+      <div class="project-header">
+        <span class="project-icon">🔤</span>
+        <div class="project-links">
+          <a href="https://github.com/JayJajoo/Spelling-Correction-and-Next-Word-Generation" target="_blank" class="project-link">↗ GitHub</a>
+        </div>
+      </div>
+      <h3 class="project-name">Spelling Correction & Next-Word Prediction</h3>
+      <p class="project-sub">NLP · PyTorch · React</p>
+      <p class="project-desc">Siamese Network for spelling correction paired with a Bi-LSTM next-word predictor — <strong>99.5% accuracy, perplexity 2</strong>. Full-stack React app via RESTful API with <strong>2ms latency</strong>.</p>
+      <div class="project-tech">
+        <span class="tag">PyTorch</span><span class="tag">Bi-LSTM</span>
+        <span class="tag">Siamese Net</span><span class="tag">React</span><span class="tag">Flask</span>
+      </div>
+    </div>
+
+    <div class="glass project-card reveal" style="transition-delay:0.2s">
+      <div class="project-header">
+        <span class="project-icon">👁️</span>
+        <div class="project-links">
+          <a href="https://github.com/JayJajoo" target="_blank" class="project-link">↗ GitHub</a>
+        </div>
+      </div>
+      <h3 class="project-name">Object Detection & 3D Coordinate Prediction</h3>
+      <p class="project-sub">Computer Vision · YOLOv8 · MiDaS</p>
+      <p class="project-desc">YOLOv8 + MiDaS fusion for real-time 3D perception in autonomous driving. Achieved <strong>precision 0.94, recall 0.89, mAP50 0.94</strong> across YOLOv5/v8 configurations.</p>
+      <div class="project-tech">
+        <span class="tag">YOLOv8</span><span class="tag">MiDaS</span>
+        <span class="tag">Python</span><span class="tag">OpenCV</span>
+      </div>
+    </div>
+
+    <div class="glass project-card reveal" style="transition-delay:0.3s">
+      <div class="project-header">
+        <span class="project-icon">🏠</span>
+        <div class="project-links">
+          <a href="https://github.com/JayJajoo" target="_blank" class="project-link">↗ GitHub</a>
+        </div>
+      </div>
+      <h3 class="project-name">Home Anomaly Detection</h3>
+      <p class="project-sub">LSTM Autoencoder · DBSCAN · PyTorch</p>
+      <p class="project-desc">Consolidated 30 sensor data files, evaluated Isolation Forest, DBSCAN, and LSTM Autoencoders. Achieved reconstruction error threshold of <strong>0.016% at 95th percentile</strong>.</p>
+      <div class="project-tech">
+        <span class="tag">PyTorch</span><span class="tag">LSTM</span>
+        <span class="tag">DBSCAN</span><span class="tag">Pandas</span>
+      </div>
+    </div>
+
+    <div class="glass project-card reveal" style="transition-delay:0.4s">
+      <div class="project-header">
+        <span class="project-icon">📝</span>
+        <div class="project-links">
+          <a href="https://github.com/JayJajoo/CoverLetterGen" target="_blank" class="project-link">↗ GitHub</a>
+        </div>
+      </div>
+      <h3 class="project-name">CoverLetterGen</h3>
+      <p class="project-sub">LLM · Python · GenAI</p>
+      <p class="project-desc">AI-powered cover letter generator leveraging LLMs to produce tailored, role-specific cover letters from a resume and job description in seconds.</p>
+      <div class="project-tech">
+        <span class="tag">Python</span><span class="tag">LLMs</span><span class="tag">GenAI</span>
+      </div>
+    </div>
+
+    <div class="glass project-card reveal" style="transition-delay:0.5s">
+      <div class="project-header">
+        <span class="project-icon">🔁</span>
+        <div class="project-links">
+          <a href="https://github.com/JayJajoo/Corrective_RAG" target="_blank" class="project-link">↗ GitHub</a>
+        </div>
+      </div>
+      <h3 class="project-name">Corrective RAG</h3>
+      <p class="project-sub">RAG · LangChain · Python</p>
+      <p class="project-desc">Implements Corrective Retrieval-Augmented Generation — dynamically grades retrieved documents and routes to web search when retrieval quality is insufficient.</p>
+      <div class="project-tech">
+        <span class="tag">RAG</span><span class="tag">LangChain</span>
+        <span class="tag">Python</span><span class="tag">ChromaDB</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+</div>
+</div>
+
+<style>
+  /* ─── TIMELINE ──────────────────────────────────────────────── */
+  .timeline { position: relative; padding-left: 2.5rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 8px; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple), transparent);
+  }
+  .timeline-item { position: relative; margin-bottom: 2.5rem; }
+  .timeline-dot {
+    position: absolute; left: -2.8rem; top: 1.6rem;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent-cyan);
+    box-shadow: 0 0 0 4px rgba(0,212,255,0.15);
+    animation: timeline-pulse 2.5s ease-in-out infinite;
+  }
+  .timeline-card { padding: 2rem; }
+  .timeline-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 1rem; margin-bottom: 1.2rem; flex-wrap: wrap;
+  }
+  .timeline-role {
+    font-family: 'Orbitron', sans-serif; font-size: 1.1rem;
+    font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem;
+  }
+  .timeline-company { font-size: 0.88rem; color: var(--accent-cyan); font-weight: 500; }
+  .timeline-date {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+    color: var(--text-muted); white-space: nowrap;
+    padding: 0.3rem 0.8rem; border-radius: 50px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  }
+  .timeline-bullets { padding-left: 1.2rem; margin-bottom: 1.2rem; }
+  .timeline-bullets li {
+    font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.7rem;
+    list-style: disc; line-height: 1.8;
+  }
+  .timeline-bullets li strong { color: var(--text-primary); }
+  .hl-cyan   { color: var(--accent-cyan); font-weight: 600; }
+  .hl-purple { color: var(--accent-purple); font-weight: 600; }
+  .timeline-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+  /* ─── TAGS ──────────────────────────────────────────────────── */
+  .tag {
+    padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem;
+    font-weight: 500; background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2); color: var(--accent-cyan);
+    transition: all var(--transition); cursor: default;
+  }
+  .tag:hover { background: rgba(0,212,255,0.18); transform: translateY(-2px); }
+
+  /* ─── PROJECTS ──────────────────────────────────────────────── */
+  .projects-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+  .project-card { padding: 1.8rem; }
+  .project-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .project-icon { font-size: 2rem; }
+  .project-link {
+    font-size: 0.78rem; font-weight: 600; color: var(--accent-cyan);
+    letter-spacing: 0.5px; padding: 0.3rem 0.75rem; border-radius: 50px;
+    border: 1px solid rgba(0,212,255,0.3); transition: all var(--transition);
+    cursor: none;
+  }
+  .project-link:hover { background: rgba(0,212,255,0.1); transform: translateY(-2px); }
+  .project-name {
+    font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700;
+    margin-bottom: 0.25rem; color: var(--text-primary); line-height: 1.3;
+  }
+  .project-sub { font-size: 0.75rem; color: var(--accent-purple); margin-bottom: 0.9rem; font-weight: 500; }
+  .project-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 1.2rem; }
+  .project-desc strong { color: var(--text-primary); }
+  .project-tech { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+</style>
