@@ -1207,54 +1207,55 @@
   }
   @media (max-width: 900px) {
     #mobile-nav {
-      display: flex;
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: space-between;
       position: fixed;
-      bottom: 1.2rem;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
       z-index: 500;
-      background: rgba(8, 8, 28, 0.55);
+      background: rgba(8, 8, 28, 0.7);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 999px;
-      padding: 0.5rem 0.6rem;
-      gap: 0.15rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04) inset;
+      padding: 0.4rem 0.5rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.04);
     }
     .mob-tab {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.18rem;
-      padding: 0.45rem 0.85rem;
+      gap: 0.15rem;
+      padding: 0.4rem 0.6rem;
       border-radius: 999px;
       cursor: pointer;
       transition: all 0.25s ease;
       text-decoration: none;
-      min-width: 48px;
+      flex: 1;
     }
-    .mob-icon { font-size: 1.15rem; line-height: 1; }
+    .mob-icon { font-size: 1.05rem; line-height: 1; }
     .mob-label {
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       font-weight: 600;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
       text-transform: uppercase;
       color: var(--text-muted);
       transition: color 0.25s ease;
+      white-space: nowrap;
     }
     .mob-tab.active {
-      background: rgba(0, 212, 255, 0.12);
-      box-shadow: inset 0 0 0 1px rgba(0,212,255,0.25);
+      background: rgba(0, 212, 255, 0.15);
+      box-shadow: inset 0 0 0 1px rgba(0,212,255,0.3);
     }
-    .mob-tab.active .mob-label {
-      color: var(--accent-cyan);
-    }
-    /* hide hamburger since we have bottom nav */
+    .mob-tab.active .mob-icon { filter: drop-shadow(0 0 4px var(--accent-cyan)); }
+    .mob-tab.active .mob-label { color: var(--accent-cyan); }
     .hamburger { display: none !important; }
-    /* add bottom padding to body so last section isn't hidden behind nav */
-    body { padding-bottom: 5rem; }
+    body { padding-bottom: 5.5rem; }
   }
 </style>
 
@@ -1534,6 +1535,8 @@ muteBtn.addEventListener('click', () => {
   isMuted = !isMuted;
   if (masterGain) masterGain.gain.value = isMuted ? 0 : 0.45;
   muteBtn.textContent = isMuted ? '🔇' : '🔊';
+  muteBtn.style.borderColor  = isMuted ? 'rgba(255,45,120,0.5)' : 'rgba(255,255,255,0.08)';
+  muteBtn.style.boxShadow    = isMuted ? '0 0 14px rgba(255,45,120,0.3)' : '';
 });
 document.body.appendChild(muteBtn);
 
