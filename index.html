@@ -1460,7 +1460,6 @@ function initAudio() {
   if (audioCtx) return;
   const AC = window.AudioContext || window.webkitAudioContext;
   audioCtx  = new AC();
-  audioCtx.resume(); // required for iOS Safari
   masterGain = audioCtx.createGain();
   masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
   masterGain.gain.linearRampToValueAtTime(0.45, audioCtx.currentTime + 4);
@@ -1521,17 +1520,69 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-/* ── Start audio on first interaction (mouse OR touch) ── */
-function tryStartAudio() {
-  if (!audioCtx) {
-    initAudio();
-  } else if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
+/* ── iOS unlock: play a silent buffer in the SAME gesture to unlock audio ── */
+function iosUnlock() {
+  const buf = audioCtx.createBuffer(1, 1, 22050);
+  const src = audioCtx.createBufferSource();
+  src.buffer = buf;
+  src.connect(audioCtx.destination);
+  src.start(0);
 }
-['mousemove','click','touchstart','touchend'].forEach(evt => {
-  document.addEventListener(evt, tryStartAudio, { once: false, passive: true });
+
+/* ── Desktop: start on first mousemove ── */
+document.addEventListener('mousemove', () => {
+  if (!audioCtx) initAudio();
+}, { once: true });
+
+/* ── Mobile sound unlock button ── */
+const soundBtn = document.createElement('div');
+soundBtn.id = 'sound-unlock';
+soundBtn.innerHTML = '🔊 Tap for Sound';
+soundBtn.style.cssText = `
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background: rgba(0,212,255,0.15);
+  border: 1px solid rgba(0,212,255,0.5);
+  color: #00d4ff;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 1rem 2rem;
+  border-radius: 999px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 30px rgba(0,212,255,0.3);
+  cursor: pointer;
+  text-align: center;
+`;
+
+/* show only on touch devices */
+if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+  soundBtn.style.display = 'block';
+}
+
+soundBtn.addEventListener('touchend', function(e) {
+  e.preventDefault();
+  if (!audioCtx) initAudio();
+  audioCtx.resume().then(() => {
+    iosUnlock();
+    soundBtn.style.display = 'none';
+  });
+}, { passive: false });
+
+soundBtn.addEventListener('click', function() {
+  if (!audioCtx) initAudio();
+  audioCtx.resume().then(() => {
+    iosUnlock();
+    soundBtn.style.display = 'none';
+  });
 });
+
+document.body.appendChild(soundBtn);
 
 /* ── Mute toggle ── */
 const muteBtn = document.createElement('button');
